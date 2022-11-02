@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Price Predictor</title>
+  <link rel="stylesheet" href="static/css/styles.css">
+  <link rel="icon" href="car-favicon.ico">
+
+</head>
+
+<body>
+  <br>
+  <h1 id="title">Car Price Predictor</h1>
+
+  <p id="description"><i>A place where you can predict the price of your used car effortlessly</i></p>
+  <div class="myform">
+    <br><br>
+    <form id="survey-form" method="post" action="{{ url_for('predict')}}">
+
+
+
+
+      <label>Car Brand</label>
+      <select id="dropdown1"
+              required style="width: 100%;
+    height: 2.375rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;" name="companyname" onclick="rendercarmodels('dropdown1','dropdown2')">
+
+        {% if gcompany == "" %}
+        <option value="" disabled selected>Select Car Brand</option>
+        {% for company in companies%}
+        <option value="{{ company }}" >{{ company }}</option>
+        {% endfor %}
+
+        {% else %}
+        <option value="{{ gcompany }}" >{{ gcompany }}</option>
+        {% for company in companies%}
+        <option value="{{ company }}" >{{ company }}</option>
+        {% endfor %}
+
+        {% endif %}
+
+      </select>
+
+      <label>Company name</label>
+      <select id="dropdown2" style="width: 100%;
+    height: 2.375rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;" class="carmodel" name="companybrand" required>
+        {%if gcarmodel=="" %}
+        <option value="" disabled selected>Select company name</option>
+        {% else %}
+        <option value="{{ gcarmodel }}" >{{gcarmodel}}</option>
+
+        {% endif %}
+
+
+
+
+      </select>
+      <label>Year of purchase</label>
+      <select id="dropdown3" name="yearsel" style="width: 100%;
+    height: 2.375rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;" required>
+        {% if gyear=="" %}
+        <option value="" disabled selected>Select Year of purchase</option>
+        {% for year in years %}
+        <option value="{{ year }}"  >{{ year }}</option>
+        {% endfor %}
+        {% else %}
+        <option value="{{ gyear }}"  >{{ gyear }}</option>
+        {% for year in years %}
+        <option value="{{ year }}"  >{{ year }}</option>
+         {% endfor %}
+        {% endif %}
+
+
+
+
+      </select>
+
+      <label>Fuel type</label>
+      <select id="dropdown4" name="fuelsel" style="width: 100%;
+    height: 2.375rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;" required>
+
+        {% if gfuel=="" %}
+        <option value="" disabled selected>Select fuel type</option>
+        {% for fuelt in fuel_type %}
+         <option value="{{ fuelt }}" >{{ fuelt }}</option>
+        {% endfor %}
+        {% else %}
+        <option value="{{ gfuel }}" >{{ gfuel }}</option>
+        {% for fuelt in fuel_type %}
+         <option value="{{ fuelt }}" >{{ fuelt }}</option>
+        {% endfor %}
+        {% endif %}
+
+      </select>
+      <label for="name" id="name-label">Kilometers driven</label>
+      {% if gkmsdriven=="" %}
+      <input type="text" id="name" style="padding:0;" name="kmgiven" placeholder="Number of Kilometres the car is driven" required>
+      {% else %}
+      <input type="text" id="name" style="padding:0;" name="kmgiven" placeholder={{ gkmsdriven }} required>
+      {% endif %}
+
+
+
+
+
+
+      <button   type="submit" id="submit">Predict Value</button>
+      <br>
+      <div class="row">
+    <h3><span id="prediction" style="font-style:italic;
+  font-size:1.75rem;
+  line-height:1.4;
+  font-weight:400;
+
+
+">{{ prediction_text }}</span></h3>
+      </div>
+      <br>
+    </form>
+  </div>
+  <br>
+<script>
+  function rendercarmodels(companyid,carmodelid)
+   {
+           var company = document.getElementById(companyid);
+           var carbrand = document.getElementById(carmodelid);
+            carbrand.value="";
+            carbrand.innerHTML="";
+
+
+
+           {% for company in companies %}
+            if(company.value =="{{company}}")
+            {
+            {% for model in car_models %}
+            {% if company in model %}
+            var newoption =document.createElement("option");
+            newoption.value="{{ model }}";
+            newoption.innerHTML="{{model}}";
+            carbrand.options.add(newoption);
+            {% endif %}
+            {% endfor %}
+            }
+           {% endfor %}
+
+
+   }
+</script>
+
+
+</body>
+
+
+</html>
